@@ -1,0 +1,47 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+def dynamicArray(n, queries):
+    result = []
+    seq_list = [[] for _ in range(n)]  # Create n empty arrays
+    lastAnswer = 0
+
+    for query in queries:
+        query_type, x, y = query
+        index = (x ^ lastAnswer) % n  # Compute the index as per the query
+
+        if query_type == 1:
+            seq_list[index].append(y)
+        elif query_type == 2:
+            size = len(seq_list[index])
+            lastAnswer = seq_list[index][y % size]
+            result.append(lastAnswer)
+
+    return result
+
+if __name__ == '__main__':
+    
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    first_multiple_input = input().rstrip().split()
+
+    n = int(first_multiple_input[0])
+
+    q = int(first_multiple_input[1])
+
+    queries = []
+
+    for _ in range(q):
+        queries.append(list(map(int, input().rstrip().split())))
+
+    result = dynamicArray(n, queries)
+
+    fptr.write('\n'.join(map(str, result)))
+    fptr.write('\n')
+
+    fptr.close()
